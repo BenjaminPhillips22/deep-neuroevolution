@@ -1,6 +1,6 @@
 USE_SDL := 0
 USE_ALE := 1
-USE_GPU := 1
+USE_GPU := 0
 
 DIR := ./
 
