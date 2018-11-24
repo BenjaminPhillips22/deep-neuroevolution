@@ -98,25 +98,27 @@ class Offspring(object):
     def training_steps(self):
         return np.sum(self.ep_len)
 
+
 class OffspringCached(object):
     def __init__(self, seeds):
         self.seeds = seeds
 
+
 def main(**exp):
     log_dir = tlogger.log_dir()
 
-    print('started main tk2')
+    print('started main tk3')
     print(type(exp))
     print(exp)
-    
+
     tlogger.info(json.dumps(exp, indent=4, sort_keys=True))
     tlogger.info('Logging to: {}'.format(log_dir))
     Model = neuroevolution.models.__dict__[exp['model']]
     all_tstart = time.time()
 
-
     def make_env(b):
         return gym_tensorflow.make(game=exp["game"], batch_size=b)
+
     worker = ConcurrentWorkers(make_env, Model, batch_size=64)
 
     with WorkerSession(worker) as sess:
@@ -125,7 +127,6 @@ def main(**exp):
 
         cached_parents = []
         results = []
-
 
         def make_offspring():
             if len(cached_parents) == 0:
@@ -151,7 +152,9 @@ def main(**exp):
             print("After TrainingState tk3")
 
         if 'load_population' in exp:
+            print("load_population IS in exp   tk3")
             state.copy_population(exp['load_population'])
+            print("state.copy_population(exp['load_population']) worked!   tk3")
 
         # Cache first population if needed (on restart)
         if state.population and exp['selection_threshold'] > 0:
