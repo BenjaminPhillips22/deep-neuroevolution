@@ -158,6 +158,7 @@ def main(**exp):
 
         # Cache first population if needed (on restart)
         if state.population and exp['selection_threshold'] > 0:
+            print("if state.population and exp['selection_threshold'] > 0: IS True    tk3")
             tlogger.info("Caching parents")
             cached_parents.clear()
             if state.elite in state.population[:exp['selection_threshold']]:
@@ -168,11 +169,14 @@ def main(**exp):
             tlogger.info("Done caching parents")
 
         while True:
+            print("I think this while loop runs...    tk3")
             tstart_iteration = time.time()
             if state.timesteps_so_far >= exp['timesteps']:
                 tlogger.info('Training terminated after {} timesteps'.format(state.timesteps_so_far))
                 break
+            print("before sess.run    tk3")
             frames_computed_so_far = sess.run(worker.steps_counter)
+            print("after sess.run    tk3")
             assert (len(cached_parents) == 0 and state.it == 0) or len(cached_parents) == exp['selection_threshold']
 
             tasks = [make_offspring() for _ in range(exp['population_size'])]
