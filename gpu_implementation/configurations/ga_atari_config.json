@@ -1,11 +1,11 @@
 {
     "game": "frostbite",
-    "model": "LargeModel",
+    "model": "Model",
     "num_validation_episodes": 30,
     "num_test_episodes": 200,
-    "population_size": 1000,
+    "population_size": 100,
     "episode_cutoff_mode": 5000,
-    "timesteps": 1.5e9,
+    "timesteps": 1.5e8,
     "validation_threshold": 10,
     "mutation_power": 0.002,
     "selection_threshold": 20
