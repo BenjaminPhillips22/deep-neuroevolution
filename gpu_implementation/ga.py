@@ -105,13 +105,20 @@ class OffspringCached(object):
 def main(**exp):
     log_dir = tlogger.log_dir()
 
+    print('started main tk2')
+    print(type(exp))
+    print(exp)
+    
     tlogger.info(json.dumps(exp, indent=4, sort_keys=True))
     tlogger.info('Logging to: {}'.format(log_dir))
     Model = neuroevolution.models.__dict__[exp['model']]
     all_tstart = time.time()
+
+
     def make_env(b):
         return gym_tensorflow.make(game=exp["game"], batch_size=b)
     worker = ConcurrentWorkers(make_env, Model, batch_size=64)
+
     with WorkerSession(worker) as sess:
         noise = SharedNoiseTable()
         rs = np.random.RandomState()
@@ -133,12 +140,15 @@ def main(**exp):
 
         try:
             load_file = os.path.join(log_dir, 'snapshot.pkl')
+            print("load_file: " + load_file )
             with open(load_file, 'rb+') as file:
                 state = pickle.load(file)
             tlogger.info("Loaded iteration {} from {}".format(state.it, load_file))
         except FileNotFoundError:
             tlogger.info('Failed to load snapshot')
+            print("Before TrainingState tk3")
             state = TrainingState(exp)
+            print("After TrainingState tk3")
 
         if 'load_population' in exp:
             state.copy_population(exp['load_population'])
