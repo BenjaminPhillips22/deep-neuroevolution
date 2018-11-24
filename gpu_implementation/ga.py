@@ -178,12 +178,16 @@ def main(**exp):
             frames_computed_so_far = sess.run(worker.steps_counter)
             print("after sess.run    tk3")
             assert (len(cached_parents) == 0 and state.it == 0) or len(cached_parents) == exp['selection_threshold']
+            print("assert must be True...    tk3")
 
             tasks = [make_offspring() for _ in range(exp['population_size'])]
+            print("is worker.monitor_eval(tasks, max_frames=state.tslimit * 4) the thing??   tk3")
+            tk3 = worker.monitor_eval(tasks, max_frames=state.tslimit * 4)
+            print("I guess not....       tk3")
             for seeds, episode_reward, episode_length in worker.monitor_eval(tasks, max_frames=state.tslimit * 4):
                 results.append(Offspring(seeds, [episode_reward], [episode_length]))
             state.num_frames += sess.run(worker.steps_counter) - frames_computed_so_far
-
+            print("for loop complete         tk3")
             state.it += 1
             tlogger.record_tabular('Iteration', state.it)
             tlogger.record_tabular('MutationPower', state.sample(state.mutation_power))
