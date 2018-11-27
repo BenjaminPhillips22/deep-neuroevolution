@@ -156,23 +156,31 @@ class ConcurrentWorkers(object):
         return self.eval_async(theta, extras, max_frames).get()
 
     def monitor_eval(self, it, max_frames):
+        print("monitor_eval - started         tk3")
         logging_interval = 5
         last_timesteps = self.sess.run(self.steps_counter)
+        print("monitor_eval - last_timesteps       tk3")
         tstart_all = time.time()
         tstart = time.time()
 
         tasks = []
         for t in it:
+            print("monitor_eval - started t for-loop       tk3")
             tasks.append(self.eval_async(*t, max_frames=max_frames))
             if time.time() - tstart > logging_interval:
+                print("monitor_eval - before cur_timesteps 1      tk3")
                 cur_timesteps = self.sess.run(self.steps_counter)
+                print("monitor_eval - after cur_timesteps 1      tk3")
                 tlogger.info('Num timesteps:', cur_timesteps, 'per second:', (cur_timesteps-last_timesteps)//(time.time()-tstart), 'num episodes finished: {}/{}'.format(sum([1 if t.ready() else 0 for t in tasks]), len(tasks)))
                 tstart = time.time()
                 last_timesteps = cur_timesteps
-
+        print("monitor_eval - ended t for-loop       tk3")
         while not all([t.ready() for t in tasks]):
+            print("monitor_eval - started while-loop       tk3")
             if time.time() - tstart > logging_interval:
+                print("monitor_eval - before cur_timesteps 2      tk3")
                 cur_timesteps = self.sess.run(self.steps_counter)
+                print("monitor_eval - after cur_timesteps 2      tk3")
                 tlogger.info('Num timesteps:', cur_timesteps, 'per second:', (cur_timesteps-last_timesteps)//(time.time()-tstart), 'num episodes:', sum([1 if t.ready() else 0 for t in tasks]))
                 tstart = time.time()
                 last_timesteps = cur_timesteps
