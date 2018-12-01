@@ -182,7 +182,7 @@ def main(**exp):
 
             tasks = [make_offspring() for _ in range(exp['population_size'])]
             print("is worker.monitor_eval(tasks, max_frames=state.tslimit * 4) the thing??   tk3")
-            tk3 = worker.monitor_eval(tasks, max_frames=state.tslimit * 4)
+            # tk3 = worker.monitor_eval(tasks, max_frames=state.tslimit * 4)
             print("I guess not....       tk3")
             for seeds, episode_reward, episode_length in worker.monitor_eval(tasks, max_frames=state.tslimit * 4):
                 results.append(Offspring(seeds, [episode_reward], [episode_length]))
